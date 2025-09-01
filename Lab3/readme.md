@@ -1,12 +1,12 @@
-# Transformes
+# Lab3_Transformers
 
-## Theory
+## 🔹 Theory
 Transformers represent a breakthrough in natural language processing by enabling models to learn contextual relationships between words through the self-attention mechanism. Pre-trained models, such as BERT and DistilBERT, are trained on massive corpora using unsupervised objectives, and can later be adapted to downstream tasks like sentiment analysis. This laboratory exercise explores how transfer learning with Transformers can be applied to a binary sentiment classification problem. Initially, the model serves as a frozen feature extractor combined with a classical classifier. Subsequently, the same Transformer is fine-tuned end-to-end, allowing task-specific adaptation and performance improvements. To further optimize the fine-tuning process, **parameter-efficient methods such as LoRA (Low-Rank Adaptation)** are introduced, which allow adapting large models by updating only a small fraction of their parameters, reducing both training cost and memory footprint.   
 
-## Implementation
+## 🔹 Implementation
 The notebook first loads the **Cornell Rotten Tomatoes dataset** using the HuggingFace `datasets` library. DistilBERT is initialized with its corresponding tokenizer, and features are extracted from the `[CLS]` token embeddings using the HuggingFace `pipeline`. These representations are used to train a **Linear Support Vector Machine (SVM)** baseline model. In the second phase, the dataset is tokenized and prepared for direct input into DistilBERT. Using the HuggingFace `Trainer` API, DistilBERT is fine-tuned on the sentiment classification task with labeled data. Training arguments, data collators, and evaluation metrics (accuracy, precision, recall, F1) are defined to monitor progress and ensure reproducibility. Additionally, the notebook integrates **LoRA via the `peft` library**, which modifies only selected projection matrices of the Transformer layers. This enables efficient adaptation with fewer trainable parameters, making fine-tuning feasible even on limited hardware resources.
 
-## Results
+## 🔹 Results
 
 ### Baseline (DistilBERT + LinearSVC) sistemare
 | Dataset      | Accuracy | Precision | Recall | F1-score |
