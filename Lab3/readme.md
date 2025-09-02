@@ -8,11 +8,11 @@ The notebook first loads the **Cornell Rotten Tomatoes dataset** using the Huggi
 
 ## 🔹 Results
 
-### Baseline (DistilBERT + LinearSVC) sistemare
+### Baseline (DistilBERT + LinearSVC) 
 | Dataset      | Accuracy | Precision | Recall | F1-score |
 |--------------|----------|-----------|--------|----------|
-| Validation   | 0.78     | 0.79      | 0.77   | 0.78     |
-| Test         | 0.77     | 0.78      | 0.76   | 0.77     |
+| Validation   | 0.82     | 0.82      | 0.82   | 0.82     |
+| Test         | 0.80     | 0.80      | 0.80   | 0.80     |
 
 ### Fine-tuned DistilBERT
 | Dataset      | Accuracy | Precision | Recall | F1-score |
