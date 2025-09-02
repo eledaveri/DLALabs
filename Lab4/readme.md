@@ -24,13 +24,15 @@ The lab focuses on two main aspects:
 1. **Dataset**
    - **ID (in-distribution):** CIFAR-10
    - **OOD:** synthetic datasets generated with `torchvision.datasets.FakeData`
+   - **SVHN** dataset used as Out Of Distribution
 
 2. **Preprocessing**
    - Image normalization
    - DataLoader for train/test sets and OOD datasets
 
 3. **Models**
-   - **Simple CNN** for classification, there are two implmentations with different complexity
+   - **Simple CNN** a shallow CNN used for image classification
+   - **Deep CNN** a more complex implementation of a CNN for image classification
    - **Autoencoder** with convolutional layers to compress and reconstruct images
 
 4. **OOD pipeline with CNN**
@@ -67,7 +69,7 @@ The lab focuses on two main aspects:
 ## 🔹 Results
 
 - **Base CNN:** trained on CIFAR-10, achieving good accuracy on the validation set.
-- **OOD detection with softmax scores:** OOD samples (FakeData) show different distributions → positive AUROC and AUPR, but limited sensitivity.
+- **OOD detection with softmax scores:** OOD samples (FakeData) show different distributions → positive AUROC and False-Positive Rate/True-positive Rate, but limited sensitivity.
 - **Autoencoder:** provided a clearer separation between ID and OOD due to high reconstruction errors on OOD images.
 - **FGSM:** the original model was vulnerable to the generated perturbations.
 - **Adversarial training:** increased CNN robustness against FGSM, reducing accuracy drop under attack, at the cost of a slight decrease on clean images.
