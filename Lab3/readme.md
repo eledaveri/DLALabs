@@ -1,14 +1,53 @@
 # Lab3_Transformers
 
-## 🔹 Theory
-Transformers represent a breakthrough in natural language processing by enabling models to learn contextual relationships between words through the self-attention mechanism. Pre-trained models, such as BERT and DistilBERT, are trained on massive corpora using unsupervised objectives, and can later be adapted to downstream tasks like sentiment analysis.
-*DistilBERT* is a smaller and faster variant of BERT, obtained through knowledge distillation, a technique where a large “teacher” model (BERT) transfers knowledge to a smaller “student” model. Specifically, DistilBERT reduces the number of layers from 12 to 6 while preserving most of BERT’s performance. Despite having about *40% fewer parameters* and running approximately *60% faster*, it retains *over 95% of BERT’s accuracy* on benchmark tasks. Architecturally, DistilBERT maintains the Transformer encoder structure (multi-head self-attention, feed-forward layers, residual connections, and layer normalization), but omits some components such as the next-sentence prediction head used in BERT’s pre-training. Instead, it focuses solely on the masked language modeling objective, which proves sufficient to learn strong contextual representations.
-This laboratory exercise explores how transfer learning with Transformers can be applied to a binary sentiment classification problem. Initially, the model serves as a frozen feature extractor combined with a classical classifier. Subsequently, the same Transformer is fine-tuned end-to-end, allowing task-specific adaptation and performance improvements. To further optimize the fine-tuning process, **parameter-efficient methods such as LoRA (Low-Rank Adaptation)** are introduced, which allow adapting large models by updating only a small fraction of their parameters, reducing both training cost and memory footprint.   
+## 📖 Theory
+Transformers represent a breakthrough in natural language processing by enabling models to learn contextual relationships between words through the **self-attention mechanism**.  
+Self-attention computes a weighted representation of tokens based on their relevance to each other. Each token is projected into **query (Q)**, **key (K)**, and **value (V)** vectors, and attention scores are computed as:
 
-## 🔹 Implementation
-The notebook first loads the **Cornell Rotten Tomatoes dataset** using the HuggingFace `datasets` library. DistilBERT is initialized with its corresponding tokenizer, and features are extracted from the `[CLS]` token embeddings using the HuggingFace `pipeline`. These representations are used to train a **Linear Support Vector Machine (SVM)** baseline model. In the second phase, the dataset is tokenized and prepared for direct input into DistilBERT. Using the HuggingFace `Trainer` API, DistilBERT is fine-tuned on the sentiment classification task with labeled data. Training arguments, data collators, and evaluation metrics (accuracy, precision, recall, F1) are defined to monitor progress and ensure reproducibility. Additionally, the notebook integrates **LoRA via the `peft` library**, which modifies only selected projection matrices of the Transformer layers. This enables efficient adaptation with fewer trainable parameters, making fine-tuning feasible even on limited hardware resources.
+\[
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\]
 
-## 🔹 Results
+This mechanism allows the model to capture both local and long-range dependencies without relying on recurrence or convolution.
+
+**Pre-trained models**, such as **BERT** and **DistilBERT**, are trained on massive corpora using unsupervised objectives, and can later be adapted to downstream tasks like sentiment analysis.
+
+- **DistilBERT** is a smaller and faster variant of BERT, obtained through **knowledge distillation**, where a large “teacher” model (BERT) transfers knowledge to a smaller “student” model.  
+  - Reduces the number of layers from 12 to 6.  
+  - Has about *40% fewer parameters* and runs *~60% faster*.  
+  - Retains *over 95% of BERT’s accuracy* on benchmark tasks.  
+  - Omits some components such as the next-sentence prediction head, focusing only on the masked language modeling objective.  
+
+This laboratory explores how **transfer learning** with Transformers can be applied to binary sentiment classification.  
+- First, DistilBERT is used as a frozen feature extractor with a classical classifier.  
+- Next, it is fine-tuned end-to-end for task-specific adaptation.  
+- Finally, **parameter-efficient fine-tuning with LoRA (Low-Rank Adaptation)** is introduced, which updates only a small subset of parameters, reducing both training cost and memory footprint.
+
+---
+
+## ⚙️ Implementation
+The notebook follows three main stages:
+
+### 1. Dataset
+- **Cornell Rotten Tomatoes dataset**, loaded with HuggingFace `datasets`.  
+- Texts tokenized with DistilBERT’s tokenizer.  
+
+### 2. Baseline: DistilBERT as Frozen Feature Extractor
+- Extract embeddings from the `[CLS]` token using HuggingFace `pipeline`.  
+- Train a **Linear SVM** classifier on top of these embeddings.  
+
+### 3. Fine-tuning
+- DistilBERT fine-tuned end-to-end using HuggingFace `Trainer`.  
+- Training arguments, collators, and evaluation metrics defined (accuracy, precision, recall, F1).  
+
+### 4. LoRA (Parameter-Efficient Fine-Tuning)
+- Integrated via the HuggingFace `peft` library.  
+- Updates only low-rank adaptation matrices inside Transformer layers.  
+- Reduces number of trainable parameters while keeping accuracy close to full fine-tuning.  
+
+---
+
+## 📊 Results
 
 ### Baseline (DistilBERT + LinearSVC) 
 | Dataset      | Accuracy | Precision | Recall | F1-score |
@@ -28,6 +67,12 @@ The notebook first loads the **Cornell Rotten Tomatoes dataset** using the Huggi
 | Validation   | 0.86     | 0.85      | 0.86   | 0.86     |
 | Test         | 0.83     | 0.82      | 0.85   | 0.84     |
 
-The baseline experiment with frozen DistilBERT embeddings and a LinearSVC classifier yields reasonable performance on both validation and test sets, establishing a starting point. Fine-tuning DistilBERT on the dataset demonstrates improved results, with higher accuracy and better-balanced classification metrics. This outcome highlights the advantage of allowing Transformer parameters to adapt to the specific sentiment classification task.
-The application of **LoRA** shows that competitive performance can be reached while drastically reducing the number of parameters to train, highlighting the practical advantages of parameter-efficient fine-tuning. Overall, the notebook illustrates a complete workflow: from data loading and exploration, through baseline feature extraction, to full fine-tuning with HuggingFace and LoRA, showing both the flexibility and the efficiency of modern Transformer-based NLP pipelines.
-Overall, the notebook illustrates a complete workflow: from data loading and exploration, through baseline feature extraction, to full fine-tuning with HuggingFace tools, showing both the flexibility and the power of modern Transformer-based NLP pipelines.
+---
+
+## 📝 Key Takeaways
+- The **baseline** with frozen DistilBERT embeddings and LinearSVC provides a reasonable starting point.  
+- **Fine-tuning DistilBERT** improves all metrics, showing the benefit of adapting the model parameters to the task.  
+- **LoRA** achieves performance comparable to full fine-tuning while updating far fewer parameters, making it a cost-effective alternative.  
+- This workflow demonstrates the flexibility and efficiency of modern Transformer-based NLP pipelines, from feature extraction to parameter-efficient fine-tuning.  
+
+---
