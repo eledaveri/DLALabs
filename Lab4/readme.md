@@ -4,18 +4,18 @@
 
 The lab focuses on two main aspects:
 
-1. **Out-of-Distribution (OOD) Detection**
-   - A classifier can be highly accurate on training data but unreliable on “out-of-distribution” samples (e.g., images of classes not present in CIFAR-10).
-   - The goal is to equip the system with a mechanism capable of recognizing and rejecting OOD samples.
+### 1. Out-of-Distribution (OOD) Detection
+- A model trained on a fixed dataset (e.g., CIFAR-10) tends to output **overconfident predictions** even for samples not belonging to the training distribution.  
+- **OOD detection** aims to detect such inputs and reject them rather than misclassify.  
+- These are the main approaches explored:
+  - **Softmax confidence**: using the maximum predicted probability as a score.  
+  - **Autoencoders**: reconstructing inputs. Since they only learn to reconstruct ID samples, OOD images yield higher reconstruction errors.  
+  - **ODIN**: a technique that improves OOD detection by applying **temperature scaling** to softmax outputs and adding a **small perturbation** to increase the gap between ID and OOD scores.
 
 2. **Adversarial Learning**
    - Deep learning models are vulnerable to **adversarial attacks**, where small imperceptible perturbations cause misclassifications.
    - One of the simplest methods to generate adversarial examples is **FGSM (Fast Gradient Sign Method)**, which adds a perturbation to the original input proportional to the gradient of the loss with respect to the input.
-   - Including adversarial examples in training (*adversarial training*) improves model robustness.
-
-3. **Autoencoder for OOD detection**
-   - **Autoencoders** learn to reconstruct images similar to those in the training set.
-   - For OOD images, reconstruction is worse → the reconstruction error can be used as a score for OOD detection.
+   - **Adversarial training** improves robustness by injecting adversarial examples during training, making the model less sensitive to such perturbations (at the cost of a small drop in clean accuracy)
 
 ---
 
@@ -33,13 +33,14 @@ The lab focuses on two main aspects:
 3. **Models**
    - **Simple CNN** a shallow CNN used for image classification
    - **Deep CNN** a more complex implementation of a CNN for image classification
+   - **ResNet** pretrained on CIFAR
    - **Autoencoder** with convolutional layers to compress and reconstruct images
 
-4. **OOD pipeline with CNN**
+4. **OOD pipeline**
    - Train the CNN on CIFAR-10
    - Collect predictions and confidence scores
    - Compare score distributions for ID vs OOD using histograms
-   - Compute metrics: **AUROC, False Poaitive Rate - True Positive Rate**
+   - Compute metrics: **AUROC, False Poaitive Rate - True Positive Rate and Precision-Recall cuve**
 
 5. **OOD pipeline with Autoencoder**
    - Train the autoencoder on CIFAR-10
@@ -69,8 +70,33 @@ The lab focuses on two main aspects:
 ## 🔹 Results
 
 - **Base CNN:** trained on CIFAR-10, achieving good accuracy on the validation set.
-- **OOD detection with softmax scores:** OOD samples (FakeData) show different distributions → positive AUROC and False-Positive Rate/True-positive Rate, but limited sensitivity.
+- **OOD detection with softmax scores:**
+   - **Softmax scores (CNN):** partial separation of ID/OOD distributions, limited sensitivity  
+   - **Autoencoder:** clear separation, reconstruction error significantly higher for OOD samples  
+   - **ODIN:**  
+   - Best performance with **T=100, ε=0.004**  
+   - Achieved **AUROC ≈ 0.89**, a significant improvement over softmax baseline  
+
 - **Autoencoder:** provided a clearer separation between ID and OOD due to high reconstruction errors on OOD images.
 - **FGSM:** the original model was vulnerable to the generated perturbations.
 - **Adversarial training:** increased CNN robustness against FGSM, reducing accuracy drop under attack, at the cost of a slight decrease on clean images.
+  - **Without adversarial training (Deep CNN):**
+     - ε=0.00000 → Accuracy **99.1%**  
+      - ε=0.00392 → Accuracy **35.6%**  
+      - ε=0.01961 → Accuracy **29.0%**  
+  → Model is highly vulnerable, accuracy collapses with small perturbations.  
+
+  - **With adversarial training:**  
+      - Clean accuracy slightly reduced (**~89.2%**)  
+      - Robustness improved against FGSM:
+       - ε=0.00392 → Accuracy **35.3%**  
+       - ε=0.01176 → Accuracy **27.4%**  
+  → Still vulnerable, but degradation is slower and more stable compared to the non-robust model.  
+
+
+## 🔹 Conclusions
+- **Softmax-based OOD detection** is weak, while **autoencoders** and **ODIN** provide more reliable detection.  
+- **FGSM attacks** expose strong vulnerabilities of CNNs; even tiny perturbations reduce accuracy drastically.  
+- **Adversarial training** trades a slight drop in clean performance for significantly improved robustness.  
+- Combining **OOD detection methods** with **robust training** is essential for real-world deployment of deep learning models in safety-critical scenarios.  
 
