@@ -1,4 +1,5 @@
 # Lab1: MLPs, CNNs, and Residual Connections
+In this laboratory we explore how residual connections influence models such as MLP and CNN, additionally we implemented the extraction of the Class Activation Map.
 
 ## 📖 Theory
 
@@ -20,6 +21,8 @@ An **MLP with residual connections** extends the standard multilayer perceptron 
 ### CNN with Residual Connections
 A **CNN with residual connections** integrates skip connections within its convolutional blocks, following the ResNet-like design. These shortcuts enable the training of very deep convolutional networks, sometimes with dozens or even hundreds of layers, without suffering from vanishing gradients. By stabilizing optimization and improving information flow, residual CNNs consistently outperform standard CNNs, especially as network depth increases.
   
+### Class Activation Map
+A Class Activation Map (CAM) is a visualization technique used in convolutional neural networks to identify which regions of an input image contribute most to a specific class prediction.
 
 ---
 
@@ -48,7 +51,7 @@ This project uses two standard datasets:
 The training pipeline is implemented in **PyTorch** and includes support for early stopping, learning rate scheduling, and experiment logging (via **Weights & Biases**).
 
 **Core components:**
-
+This combination is the one that provides the best results, the various attempts are logged on wandb.
 - **Loss function:** Cross-Entropy Loss for classification.  
 - **Optimizers:**  
   - **MLPs:** Adam  
@@ -103,7 +106,30 @@ The training pipeline is implemented in **PyTorch** and includes support for ear
 - Enables **deep architectures** (light to extremely deep) while mitigating vanishing gradients.  
 - Supports **CAM visualization** through the GAP layer.
  
-  
+### 4. Class Activation Maps (CAM) Visualization
+
+This project provides functionality to visualize **Class Activation Maps (CAMs)**, which highlight the parts of an image that most influence a model’s prediction. CAMs help understand what a neural network “looks at” when classifying images.
+
+## How it works
+
+1. **Load and preprocess images** from datasets like CIFAR-10 or Imagenette.  
+2. **Forward the image through the model** to obtain predictions and confidence scores.  
+3. **Generate CAMs** by combining the convolutional features with the classifier weights for the predicted class, keeping only the positive contributions.  
+4. **Resize and overlay the CAM** on the original image for a clear visual explanation.  
+
+## Visualization
+
+- **Original Image:** Shows the input with the true label.  
+- **Activation Map:** Highlights regions influencing the model’s decision.  
+- **Overlay:** Combines the original image with the CAM, showing which areas contributed most to the prediction.  
+
+## Benefits
+
+- Understand why the model made a specific prediction.  
+- Identify important image regions for classification.  
+- Compare model focus across different datasets or architectures.  
+
+This feature makes the model more interpretable, allowing both quantitative predictions and qualitative visual explanations.
 
 
 ---
@@ -147,7 +173,7 @@ Below is a structured summary of the results.
 - **Vanilla MLP**: Each layer must fully transform the input, making gradients harder to propagate as depth grows. Training becomes unstable.  
 - **Residual MLP**: Each layer only learns a **residual correction** to the previous representation. Identity shortcuts improve gradient flow, prevent vanishing, and make deep networks trainable.  
 
-#### Takeaway
+#### Key Points
 - For **shallow models**, both MLP and Residual MLP perform similarly.  
 - For **deeper models**, only the Residual MLP remains stable and can even outperform shallower versions.  
 - Although MNIST itself does not benefit much from extreme depth, this experiment clearly shows how **residual connections are a key tool to stabilize optimization in deep neural networks**.
@@ -167,8 +193,8 @@ Below is a structured summary of the results.
 | Residual CNN        | Shallow        | [64, 64, 128, 128, 256]           | 92                | 
 | Residual CNN        | Medium         | [64, 64, 128, 128, 256, 256]      | 93                | 
 | Residual CNN        | Deep           | [64, 64, 128, 128, 256, 256, 512] | 93                | 
-| Residual CNN        | Very Deep      | [64, 64, 128, 128, 256, 256, 512, 512] | 90–92        | 
-| Residual CNN        | Extremely Deep | [64, 64, 128, 128, 256, 256, 512, 512, 512] | 91–93   | 
+| Residual CNN        | Very Deep      | [64, 64, 128, 128, 256, 256, 512, 512] | 93           | 
+
 ---
 
 ## 📝 Key Takeaways
@@ -182,3 +208,7 @@ Below is a structured summary of the results.
 
 ---
 
+## Refernces
+
+- Bagdanov, A. D., DLA course material (2025)
+- He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep Residual Learning for Image Recognition. IEEE Conference on Computer Vision and Pattern Recognition (CVPR). arXiv:1512.03385
