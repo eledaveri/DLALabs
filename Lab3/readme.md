@@ -29,7 +29,7 @@ This laboratory explores how **transfer learning** with Transformers can be appl
 The notebook follows three main stages:
 
 ### 1. Dataset
-- **Cornell Rotten Tomatoes dataset**, loaded with HuggingFace `datasets`.  
+- **Cornell Rotten Tomatoes dataset**, loaded with HuggingFace `datasets`, contains movie reviews divided in negative (0) and positive (1)
 - Texts tokenized with DistilBERT’s tokenizer.  
 
 ### 2. Baseline: DistilBERT as Frozen Feature Extractor

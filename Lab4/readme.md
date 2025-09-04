@@ -5,17 +5,15 @@
 The lab focuses on two main aspects:
 
 ### 1. Out-of-Distribution (OOD) Detection
-- A model trained on a fixed dataset (e.g., CIFAR-10) tends to output **overconfident predictions** even for samples not belonging to the training distribution.  
-- **OOD detection** aims to detect such inputs and reject them rather than misclassify.  
-- These are the main approaches explored:
+A model trained on a fixed dataset (e.g., CIFAR-10) can produce overconfident predictions for samples outside the training distribution, so **OOD detection** aims to identify and reject such inputs rather than misclassifying them.
+These are the main approaches explored: 
   - **Softmax confidence**: using the maximum predicted probability as a score.  
   - **Autoencoders**: reconstructing inputs. Since they only learn to reconstruct ID samples, OOD images yield higher reconstruction errors.  
   - **ODIN**: a technique that improves OOD detection by applying **temperature scaling** to softmax outputs and adding a **small perturbation** to increase the gap between ID and OOD scores.
 
 2. **Adversarial Learning**
-   - Deep learning models are vulnerable to **adversarial attacks**, where small imperceptible perturbations cause misclassifications.
-   - One of the simplest methods to generate adversarial examples is **FGSM (Fast Gradient Sign Method)**, which adds a perturbation to the original input proportional to the gradient of the loss with respect to the input.
-   - **Adversarial training** improves robustness by injecting adversarial examples during training, making the model less sensitive to such perturbations (at the cost of a small drop in clean accuracy)
+Deep learning models are vulnerable to **adversarial attacks**, where small imperceptible perturbations can cause misclassifications; one common method to generate such examples is **FGSM (Fast Gradient Sign Method)**, which perturbs the input proportionally to the gradient of the loss with respect to it, and **adversarial training** mitigates this vulnerability by including these perturbed examples during training, improving robustness at the cost of a slight reduction in clean accuracy.
+
 
 ---
 
@@ -75,7 +73,7 @@ The lab focuses on two main aspects:
    - **Autoencoder:** clear separation, reconstruction error significantly higher for OOD samples  
    - **ODIN:**  
    - Best performance with **T=100, ε=0.004**  
-   - Achieved **AUROC ≈ 0.89**, a significant improvement over softmax baseline  
+   - the model trained according to standard procedure achieved **AUROC ≈ 0.89** while the model trained with the dataset augmented via **FGSM** achieved **AUROC ≈ 0.96**
 
 - **Autoencoder:** provided a clearer separation between ID and OOD due to high reconstruction errors on OOD images.
 - **FGSM:** the original model was vulnerable to the generated perturbations.
