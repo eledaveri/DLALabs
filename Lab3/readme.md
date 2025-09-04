@@ -1,4 +1,4 @@
-# Lab3_Transformers
+# Lab3: Transformers
 
 ## 📖 Theory
 Transformers represent a breakthrough in natural language processing by enabling models to learn contextual relationships between words through the **self-attention mechanism**.  
