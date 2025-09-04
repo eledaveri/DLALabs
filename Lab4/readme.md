@@ -98,3 +98,6 @@ Deep learning models are vulnerable to **adversarial attacks**, where small impe
 - **Adversarial training** trades a slight drop in clean performance for significantly improved robustness.  
 - Combining **OOD detection methods** with **robust training** is essential for real-world deployment of deep learning models in safety-critical scenarios.  
 
+## References 
+- Bagdanov, A. D., DLA course material (2025)
+- Seidenari, L., DLA course material (2025)
