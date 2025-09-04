@@ -1,6 +1,6 @@
 # Lab 4: OOD Detection & Adversarial Learning
 
-## 🔹 Theory
+## 📖 Theory
 
 The lab focuses on two main aspects:
 
@@ -19,7 +19,7 @@ The lab focuses on two main aspects:
 
 ---
 
-## 🔹 Implementation
+## ⚙️ Implementation
 
 1. **Dataset**
    - **ID (in-distribution):** CIFAR-10
@@ -67,7 +67,7 @@ The lab focuses on two main aspects:
 
 ---
 
-## 🔹 Results
+## 📊 Results
 
 - **Base CNN:** trained on CIFAR-10, achieving good accuracy on the validation set.
 - **OOD detection with softmax scores:**
@@ -94,7 +94,7 @@ The lab focuses on two main aspects:
   → Still vulnerable, but degradation is slower and more stable compared to the non-robust model.  
 
 
-## 🔹 Conclusions
+## 📝 Key Takeaways
 - **Softmax-based OOD detection** is weak, while **autoencoders** and **ODIN** provide more reliable detection.  
 - **FGSM attacks** expose strong vulnerabilities of CNNs; even tiny perturbations reduce accuracy drastically.  
 - **Adversarial training** trades a slight drop in clean performance for significantly improved robustness.  
