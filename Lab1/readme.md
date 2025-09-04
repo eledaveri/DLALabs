@@ -11,7 +11,8 @@ A **Multilayer Perceptron (MLP)** is a feedforward neural network composed of fu
 A **Convolutional Neural Network (CNN)** is a neural architecture designed to preserve and exploit the spatial structure of data. Instead of flattening inputs as in MLPs, CNNs apply local filters (kernels) that slide across the image to capture spatial features such as edges, textures, and patterns. Pooling layers further reduce dimensionality, improving computational efficiency and providing a degree of translation invariance. By leveraging the 2D structure of images, CNNs achieve far superior performance compared to MLPs on vision tasks.
 
 
-**Residual connections** allow neural networks to learn residual mappings instead of direct transformations. A residual block computes \( y = F(x) + x \), where \( F(x) \) is the learned transformation and \( x \) is the identity shortcut. This simple idea addresses vanishing gradient issues, enabling the training of much deeper models while keeping optimization stable and improving generalization performance.
+### Residual connections 
+Residual Connections allow neural networks to learn residual mappings instead of direct transformations. A residual block computes \( y = F(x) + x \), where \( F(x) \) is the learned transformation and \( x \) is the identity shortcut. This simple idea addresses vanishing gradient issues, enabling the training of much deeper models while keeping optimization stable and improving generalization performance.
 
 
 ### MLP with Residual Connections
@@ -204,7 +205,7 @@ Below is a structured summary of the results.
 
 - In this experiment, vanilla deep CNNs achieved the highest test accuracy, outperforming very deep residual networks.
 
-- Results partially align with ResNet (He et al., 2015), highlighting that residuals help training deep networks, but extreme depth can be detrimental on small datasets like CIFAR-10.
+- Results partially align with ResNet, highlighting that residuals help training deep networks, but extreme depth can be detrimental on small datasets like CIFAR-10.
 
 ---
 

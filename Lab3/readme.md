@@ -4,9 +4,9 @@
 Transformers represent a breakthrough in natural language processing by enabling models to learn contextual relationships between words through the **self-attention mechanism**.  
 Self-attention computes a weighted representation of tokens based on their relevance to each other. Each token is projected into **query (Q)**, **key (K)**, and **value (V)** vectors, and attention scores are computed as:
 
-\[
+$$
 \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
-\]
+$$
 
 This mechanism allows the model to capture both local and long-range dependencies without relying on recurrence or convolution.
 
